@@ -1,20 +1,11 @@
 import winston from "winston";
 import moment from "moment-timezone";
-import fs from "fs";
-import path from "path";
-
-//Config
+import { MongoDB } from "winston-mongodb";
 import { Config } from "./index.js";
-
-// Ensure log directory exists
-const logDirectory = path.resolve(process.cwd(), "logs");
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 const logger = winston.createLogger({
     level: "info",
-    defaultMeta: {
-        serviceName: "prisma-express-js-kit",
-    },
+    defaultMeta: { serviceName: "prisma-express-js-kit" },
     format: winston.format.combine(
         winston.format.timestamp({
             format: () => moment().tz(Config.TZ).format(),
@@ -24,15 +15,15 @@ const logger = winston.createLogger({
         }),
     ),
     transports: [
-        new winston.transports.File({
-            dirname: "logs",
-            filename: "combined.log",
+        new MongoDB({
+            db: Config.MONGODB_LOGS_DATABASE_URI,
+            collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "info",
             silent: Config.NODE_ENV === "test",
         }),
-        new winston.transports.File({
-            dirname: "logs",
-            filename: "error.log",
+        new MongoDB({
+            db: Config.MONGODB_LOGS_DATABASE_URI,
+            collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "error",
             silent: Config.NODE_ENV === "test",
         }),
