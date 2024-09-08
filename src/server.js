@@ -19,7 +19,7 @@ const startServer = async () => {
     logger.info(`[✨] Timezone Offset: ${new Date().getTimezoneOffset()} minutes ⏰`);
 
     try {
-        app.listen(8080, () => {
+        app.listen(PORT, () => {
             logger.info(`[✨] Server Port: ${PORT} 🚀`);
         });
     } catch (err) {

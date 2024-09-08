@@ -7,11 +7,11 @@
         "node": "20.x"
     },
     "scripts": {
-        "start": "cross-env NODE_ENV=production && npm run prisma:push && node src/server.js",
-        "dev": "cross-env NODE_ENV=development nodemon src/server.js",
+        "start": "dotenv -e .env -- npm run prisma:push && cross-env NODE_ENV=production node src/server.js",
+        "dev": "dotenv -e .env.development -- npm run prisma:push && cross-env NODE_ENV=development nodemon src/server.js",
+        "test": "npm run test",
         "format:check": "prettier --check .",
         "format:fix": "prettier --write .",
-        "test": "npm run test",
         "prepare": "husky",
         "prisma:generate": "cd src && npx prisma generate",
         "prisma:migrate": "cd src && npx prisma migrate",
@@ -92,6 +92,7 @@
     "description": "prisma-express-js-kit is a robust boilerplate project designed for building RESTful APIs using Node.js, Express.js, MySQL, and Prisma ORM. With modern JavaScript (ES6) support, it provides a solid foundation for scalable and efficient backend development, ensuring quick project setup and best practices.",
     "devDependencies": {
         "cross-env": "^7.0.3",
+        "dotenv-cli": "^7.4.2",
         "husky": "^9.1.5",
         "lint-staged": "^15.2.9",
         "nodemon": "^3.1.4",
@@ -109,10 +110,13 @@
         "http-errors": "^2.0.0",
         "jsonwebtoken": "^9.0.2",
         "moment-timezone": "^0.5.45",
+        "mongoose": "^8.6.1",
         "morgan": "^1.10.0",
         "mysql2": "^3.11.0",
         "path": "^0.12.7",
         "winston": "^3.14.2",
+        "winston-mongodb": "^5.1.1",
+        "winston-transport": "^4.7.1",
         "zod": "^3.23.8"
     },
     "lint-staged": {
