@@ -1,7 +1,36 @@
 import winston from "winston";
 import moment from "moment-timezone";
-import { MongoDB } from "winston-mongodb";
 import { Config } from "./index.js";
+import TransportStreamOptions from "winston-transport";
+import mongoose from "mongoose";
+
+class MongoDBTransport extends TransportStreamOptions {
+    constructor(opts) {
+        super(opts);
+        this.collection = opts.collection;
+        this.db = mongoose.createConnection(opts.db);
+
+        this.db.once("open", () => {
+            console.log("Connected to MongoDB");
+        });
+
+        this.db.on("error", (err) => {
+            console.error("MongoDB connection error:", err);
+        });
+    }
+
+    log(info, callback) {
+        const { level, message, timestamp } = info;
+        const logEntry = { level, message, timestamp };
+
+        this.db.collection(this.collection).insertOne(logEntry, (err) => {
+            if (err) {
+                console.error("Error logging to MongoDB:", err);
+            }
+            callback();
+        });
+    }
+}
 
 const logger = winston.createLogger({
     level: "info",
@@ -15,13 +44,13 @@ const logger = winston.createLogger({
         }),
     ),
     transports: [
-        new MongoDB({
+        new MongoDBTransport({
             db: Config.MONGODB_LOGS_DATABASE_URI,
             collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "info",
             silent: Config.NODE_ENV === "test",
         }),
-        new MongoDB({
+        new MongoDBTransport({
             db: Config.MONGODB_LOGS_DATABASE_URI,
             collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "error",
