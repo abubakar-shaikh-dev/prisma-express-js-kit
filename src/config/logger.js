@@ -20,12 +20,18 @@ const logger = winston.createLogger({
             collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "info",
             silent: Config.NODE_ENV === "test",
+            options: {
+                useUnifiedTopology: true,
+            },
         }),
         new MongoDB({
             db: Config.MONGODB_LOGS_DATABASE_URI,
             collection: Config.MONGODB_LOGS_COLLECTION_NAME,
             level: "error",
             silent: Config.NODE_ENV === "test",
+            options: {
+                useUnifiedTopology: true,
+            },
         }),
         new winston.transports.Console({
             level: "info",
