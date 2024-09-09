@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Config } from "../config/index.js";
 import { PrismaClient } from "@prisma/client";
+import createHttpError from "http-errors";
 
 const prisma = new PrismaClient();
 
@@ -43,6 +44,11 @@ export const verifyRefreshToken = async (refreshToken) => {
     //verify the refresh token
     const decoded = jwt.verify(refreshToken, Config.JWT_SECRET);
 
+    //if token is invalid
+    if (!decoded) {
+        throw new createHttpError.Unauthorized("Invalid refresh token!");
+    }
+
     //get the refresh token from the database
     const storedToken = await prisma.refresh_tokens.findUnique({
         where: {
@@ -52,7 +58,7 @@ export const verifyRefreshToken = async (refreshToken) => {
 
     //if token not found
     if (!storedToken) {
-        throw new createHttpError.Unauthorized("Invalid refresh token!");
+        throw new createHttpError.Unauthorized("refresh token not found!");
     }
 
     return decoded.user_id;

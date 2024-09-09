@@ -8,13 +8,18 @@ import * as authValidation from "../validations/auth.validation.js";
 export const registerUser = async (req, res, next) => {
     try {
         const validData = authValidation.registerSchema.parse(req.body);
-        const tokens = await userServices.registerUser(validData); //user will return access_token
+        const registeredUser = await userServices.registerUser(validData); //user will return user
+
+        //generate access token and refresh token
+        const access_token = await tokenServices.generateAccessToken(registeredUser.id);
+        const refresh_token = await tokenServices.generateRefreshToken(registeredUser.id);
 
         res.status(201).json({
             status: true,
             message: "User registered successfully",
             data: {
-                ...tokens,
+                access_token,
+                refresh_token,
             },
         });
     } catch (error) {
@@ -25,12 +30,20 @@ export const registerUser = async (req, res, next) => {
 export const loginUser = async (req, res, next) => {
     try {
         const validData = authValidation.loginSchema.parse(req.body);
-        const tokens = await userServices.loginUser(validData); //user will return access_token
+
+        //authenticate the user
+        const authenticatedUser = await userServices.loginUser(validData); //user will return user
+
+        //generate access token and refresh token
+        const access_token = await tokenServices.generateAccessToken(authenticatedUser.id);
+        const refresh_token = await tokenServices.generateRefreshToken(authenticatedUser.id);
+
         res.status(200).json({
             status: true,
             message: "User logged in successfully",
             data: {
-                ...tokens,
+                access_token,
+                refresh_token,
             },
         });
     } catch (error) {

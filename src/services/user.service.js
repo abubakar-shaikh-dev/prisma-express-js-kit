@@ -35,14 +35,7 @@ export const registerUser = async (userData) => {
         },
     });
 
-    //generate a token
-    const access_token = await tokenService.generateAccessToken(newUser.id);
-    const refresh_token = await tokenService.generateRefreshToken(newUser.id);
-
-    return {
-        access_token,
-        refresh_token,
-    };
+    return newUser;
 };
 
 export const loginUser = async (userData) => {
@@ -78,12 +71,5 @@ export const loginUser = async (userData) => {
         throw new createHttpError.Unauthorized("Invalid credentials!");
     }
 
-    //generate a token
-    const access_token = await tokenService.generateAccessToken(user.id);
-    const refresh_token = await tokenService.generateRefreshToken(user.id);
-
-    return {
-        access_token,
-        refresh_token,
-    };
+    return user;
 };
