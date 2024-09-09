@@ -7,21 +7,21 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
-    id            Int            @id @default(autoincrement())
-    name          String?        @db.VarChar(200)
-    email         String?        @db.VarChar(200)
-    password      String?        @db.VarChar(200)
-    created_at    DateTime       @default(now()) @db.DateTime(0)
-    updated_at    DateTime       @default(now()) @updatedAt @db.DateTime(0)
-    refreshTokens RefreshToken[] // Relation to RefreshToken
+model users {
+    id            Int             @id @default(autoincrement())
+    name          String?         @db.VarChar(200)
+    email         String?         @unique @db.VarChar(200)
+    password      String?         @db.VarChar(200)
+    created_at    DateTime        @default(now()) @db.DateTime(0)
+    updated_at    DateTime        @default(now()) @updatedAt @db.DateTime(0)
+    refreshTokens refreshTokens[] // Relation to RefreshToken
 }
 
-model RefreshToken {
+model refreshTokens {
     id        Int      @id @default(autoincrement())
     token     String   @unique
     user_id   Int
-    user      User     @relation(fields: [user_id], references: [id])
+    user      users    @relation(fields: [user_id], references: [id])
     expiry    DateTime
     createdAt DateTime @default(now())
 }

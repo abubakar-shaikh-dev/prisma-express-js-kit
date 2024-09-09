@@ -24,10 +24,10 @@ export const generateRefreshToken = async (userId) => {
     });
 
     //store the refresh token in the database
-    await prisma.refreshToken.create({
+    await prisma.refreshTokens.create({
         data: {
             token: refreshToken,
-            userId,
+            user_id: userId,
             expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days expiry
         },
     });

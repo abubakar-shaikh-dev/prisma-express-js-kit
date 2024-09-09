@@ -13,9 +13,9 @@ export const registerUser = async (userData) => {
     const { name, email, password } = userData;
 
     //check if the user already exists
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
         where: {
-            email,
+            email: email,
         },
     });
 
@@ -27,7 +27,7 @@ export const registerUser = async (userData) => {
     const hashedPassword = await hashPassword(password);
 
     //create the user
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.users.create({
         data: {
             name,
             email,
