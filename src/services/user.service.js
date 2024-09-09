@@ -67,7 +67,11 @@ export const loginUser = async (userData) => {
     }
 
     //generate a token
-    const access_token = tokenService.generateAccessToken(user.id);
+    const access_token = await tokenService.generateAccessToken(user.id);
+    const refresh_token = await tokenService.generateRefreshToken(user.id);
 
-    return access_token;
+    return {
+        access_token,
+        refresh_token,
+    };
 };

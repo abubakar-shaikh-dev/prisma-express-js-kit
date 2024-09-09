@@ -24,12 +24,12 @@ export const registerUser = async (req, res, next) => {
 export const loginUser = async (req, res, next) => {
     try {
         const validData = authValidation.loginSchema.parse(req.body);
-        const token = await userService.loginUser(validData); //user will return access_token
+        const tokens = await userService.loginUser(validData); //user will return access_token
         res.status(200).json({
             status: true,
             message: "User logged in successfully",
             data: {
-                access_token: token,
+                ...tokens,
             },
         });
     } catch (error) {
