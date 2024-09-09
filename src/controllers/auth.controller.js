@@ -51,7 +51,7 @@ export const loginUser = async (req, res, next) => {
     }
 };
 
-export const refreshToken = async (req, res, next) => {
+export const getRefreshToken = async (req, res, next) => {
     try {
         //validate the request body
         const valid_data = authValidation.refreshTokenSchema.parse(req.body);
