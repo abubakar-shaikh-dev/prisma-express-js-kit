@@ -7,13 +7,13 @@ import * as authValidation from "../validations/auth.validation.js";
 export const registerUser = async (req, res, next) => {
     try {
         const validData = authValidation.registerSchema.parse(req.body);
-        const token = await userService.registerUser(validData); //user will return access_token
+        const tokens = await userService.registerUser(validData); //user will return access_token
 
         res.status(201).json({
             status: true,
             message: "User registered successfully",
             data: {
-                access_token: token,
+                ...tokens,
             },
         });
     } catch (error) {
