@@ -52,11 +52,23 @@ export const loginUser = async (userData) => {
     const user = await prisma.users.findUnique({
         where: {
             email,
+            is_deleted: false,
         },
     });
 
+    //if user not found
     if (!user) {
         throw new createHttpError.NotFound("User not found!");
+    }
+
+    //if use is deactivated
+    if (user.is_active === false) {
+        throw new createHttpError.Forbidden("User is deactivated!");
+    }
+
+    //if user is banned
+    if (user.is_banned === true) {
+        throw new createHttpError.Forbidden("User is banned!");
     }
 
     //compare the passwords
