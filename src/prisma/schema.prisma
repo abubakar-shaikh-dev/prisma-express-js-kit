@@ -8,19 +8,19 @@ datasource db {
 }
 
 model users {
-    id            Int             @id @default(autoincrement())
-    name          String?         @db.VarChar(200)
-    email         String?         @unique @db.VarChar(200)
-    password      String?         @db.VarChar(200)
-    created_at    DateTime        @default(now()) @db.DateTime(0)
-    updated_at    DateTime        @default(now()) @updatedAt @db.DateTime(0)
-    is_active     Boolean         @default(true)
-    is_banned     Boolean         @default(false)
-    is_deleted    Boolean         @default(false)
-    refreshTokens refreshTokens[] // Relation to RefreshToken
+    id             Int              @id @default(autoincrement())
+    name           String?          @db.VarChar(200)
+    email          String?          @unique @db.VarChar(200)
+    password       String?          @db.VarChar(200)
+    created_at     DateTime         @default(now()) @db.DateTime(0)
+    updated_at     DateTime         @default(now()) @updatedAt @db.DateTime(0)
+    is_active      Boolean          @default(true)
+    is_banned      Boolean          @default(false)
+    is_deleted     Boolean          @default(false)
+    refresh_tokens refresh_tokens[] // Relation to RefreshToken
 }
 
-model refreshTokens {
+model refresh_tokens {
     id        Int      @id @default(autoincrement())
     token     String   @unique
     user_id   Int
