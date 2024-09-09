@@ -37,17 +37,20 @@ export const generateRefreshToken = async (user_id) => {
 };
 
 export const verifyJWTToken = (token) => {
-    return jwt.verify(token, Config.JWT_SECRET);
+    //verify the token
+    const decoded = jwt.verify(token, Config.JWT_SECRET);
+
+    //if token is invalid
+    if (!decoded) {
+        throw new createHttpError.Unauthorized("Invalid token!");
+    }
+
+    return decoded;
 };
 
 export const verifyRefreshToken = async (refreshToken) => {
     //verify the refresh token
-    const decoded = jwt.verify(refreshToken, Config.JWT_SECRET);
-
-    //if token is invalid
-    if (!decoded) {
-        throw new createHttpError.Unauthorized("Invalid refresh token!");
-    }
+    const decoded = verifyJWTToken(refreshToken);
 
     //get the refresh token from the database
     const storedToken = await prisma.refresh_tokens.findUnique({
