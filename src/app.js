@@ -9,7 +9,11 @@ import { Config } from "./config/index.js";
 //Middlewares
 import api_compression from "./middlewares/api_compression.middleware.js";
 import global_error_handler from "./middlewares/global_error_handler.middleware.js";
-import { decrypt_request, encrypt_response } from "./middlewares/api_encryption.middleware.js";
+import {
+    decrypt_request,
+    encrypt_response,
+    skip_encryption,
+} from "./middlewares/api_encryption.middleware.js";
 
 //Routes Barrel File
 import routes from "./routes/index.js";
@@ -28,7 +32,7 @@ app.use(decrypt_request);
 app.use(encrypt_response);
 
 //Root Route
-app.get("/", (req, res) => {
+app.get("/", skip_encryption, (req, res) => {
     return res.status(200).json({
         status: true,
         message: "Welcome to prisma-express-js-kit, give a star ⭐ if you like it.",

@@ -37,10 +37,19 @@ const decrypt_request = (req, res, next) => {
 const encrypt_response = (req, res, next) => {
     const original_json = res.json;
     res.json = function (body) {
+        if (res.locals.skipEncryption) {
+            return original_json.call(this, body);
+        }
         const encrypted_body = encrypt(JSON.stringify(body));
         return original_json.call(this, { encrypted_data: encrypted_body });
     };
     next();
 };
 
-export { decrypt_request, encrypt_response };
+// Function to skip encryption for specific routes
+const skip_encryption = (req, res, next) => {
+    res.locals.skipEncryption = true;
+    next();
+};
+
+export { decrypt_request, encrypt_response, skip_encryption };
