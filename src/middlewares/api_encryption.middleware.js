@@ -24,9 +24,9 @@ const decrypt = (text) => {
 };
 
 const decrypt_request = (req, res, next) => {
-    if (req.body && req.body.encrypted_data) {
+    if (req.body && req.body.itAm_Lfdwnk_sq) {
         try {
-            const decrypted_data = decrypt(req.body.encrypted_data);
+            const decrypted_data = decrypt(req.body.itAm_Lfdwnk_sq);
             req.body = JSON.parse(decrypted_data);
         } catch (err) {
             return res.status(400).json({ error: "Invalid encrypted data" });
@@ -42,7 +42,7 @@ const encrypt_response = (req, res, next) => {
             return original_json.call(this, body);
         }
         const encrypted_body = encrypt(JSON.stringify(body));
-        return original_json.call(this, { encrypted_data: encrypted_body });
+        return original_json.call(this, { itAm_Lfdwnk_sq: encrypted_body });
     };
     next();
 };
