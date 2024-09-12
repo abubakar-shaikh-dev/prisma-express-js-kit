@@ -9,6 +9,7 @@ import { Config } from "./config/index.js";
 //Middlewares
 import api_compression from "./middlewares/api_compression.middleware.js";
 import global_error_handler from "./middlewares/global_error_handler.middleware.js";
+import { decrypt_request, encrypt_response } from "./middlewares/api_encryption.middleware.js";
 
 //Routes Barrel File
 import routes from "./routes/index.js";
@@ -23,6 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(api_compression);
+app.use(decrypt_request);
+app.use(encrypt_response);
 
 //Root Route
 app.get("/", (req, res) => {

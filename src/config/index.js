@@ -20,6 +20,7 @@ const ConfigSchema = object({
     JWT_ACCESS_TOKEN_EXPIRES_IN: string(),
     JWT_REFRESH_TOKEN_EXPIRES_IN: string(),
     OTP_EXPIRY: number(),
+    AES_ENCRYPTION_KEY: string().length(64),
 });
 
 const envVariables = {
@@ -34,6 +35,7 @@ const envVariables = {
     JWT_ACCESS_TOKEN_EXPIRES_IN: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
     JWT_REFRESH_TOKEN_EXPIRES_IN: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
     OTP_EXPIRY: Number(process.env.OTP_EXPIRY),
+    AES_ENCRYPTION_KEY: process.env.AES_ENCRYPTION_KEY,
 };
 
 let Config;
