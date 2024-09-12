@@ -1,7 +1,8 @@
 import crypto from "crypto";
+import { Config } from "../config/index.js";
 
 const algorithm = "aes-256-cbc";
-const secret_key = Buffer.from(process.env.AES_ENCRYPTION_KEY, "hex");
+const secret_key = Buffer.from(Config.AES_ENCRYPTION_KEY, "hex");
 const iv_length = 16;
 
 const encrypt = (text) => {
